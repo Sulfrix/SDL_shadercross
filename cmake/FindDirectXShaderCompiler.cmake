@@ -22,14 +22,26 @@ if(WIN32)
         DirectXShaderCompiler_dxil_BINARY
     )
 else()
-    find_path(DirectXShaderCompiler_INCLUDE_PATH NAMES "dxcapi.h" PATH_SUFFIXES "include" "include/dxc" "linux/include" "linux/include/dxc")
-    find_library(DirectXShaderCompiler_dxcompiler_LIBRARY NAMES "dxcompiler" PATH_SUFFIXES "lib" "linux/lib" HINTS ${DirectXShaderCompiler_ROOT})
-    find_library(DirectXShaderCompiler_dxil_LIBRARY NAMES "dxil" PATH_SUFFIXES "lib" "linux/lib" HINTS ${DirectXShaderCompiler_ROOT})
-    set(required_vars
-        DirectXShaderCompiler_INCLUDE_PATH
-        DirectXShaderCompiler_dxcompiler_LIBRARY
-        DirectXShaderCompiler_dxil_LIBRARY
-    )
+    if (NOT APPLE)
+        find_path(DirectXShaderCompiler_INCLUDE_PATH NAMES "dxcapi.h" PATH_SUFFIXES "include" "include/dxc" "linux/include" "linux/include/dxc")
+        find_library(DirectXShaderCompiler_dxcompiler_LIBRARY NAMES "dxcompiler" PATH_SUFFIXES "lib" "linux/lib" HINTS ${DirectXShaderCompiler_ROOT})
+        find_library(DirectXShaderCompiler_dxil_LIBRARY NAMES "dxil" PATH_SUFFIXES "lib" "linux/lib" HINTS ${DirectXShaderCompiler_ROOT})
+        set(required_vars
+            DirectXShaderCompiler_INCLUDE_PATH
+            DirectXShaderCompiler_dxcompiler_LIBRARY
+            DirectXShaderCompiler_dxil_LIBRARY
+        )
+    else()
+        find_path(DirectXShaderCompiler_INCLUDE_PATH NAMES "dxcapi.h" PATH_SUFFIXES "include" "include/dxc" "macos/include" "macos/include/dxc")
+        find_library(DirectXShaderCompiler_dxcompiler_LIBRARY NAMES "dxcompiler" PATH_SUFFIXES "lib" "macos/lib" HINTS ${DirectXShaderCompiler_ROOT})
+        #find_library(DirectXShaderCompiler_dxil_LIBRARY NAMES "dxil" PATH_SUFFIXES "lib" "linux/lib" HINTS ${DirectXShaderCompiler_ROOT})
+        set(required_vars
+                DirectXShaderCompiler_INCLUDE_PATH
+                DirectXShaderCompiler_dxcompiler_LIBRARY
+                #DirectXShaderCompiler_dxil_LIBRARY
+        )
+    endif()
+
 endif()
 
 include(FindPackageHandleStandardArgs)
